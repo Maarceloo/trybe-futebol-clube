@@ -34,6 +34,13 @@ class MatchesController {
     const newMatche = await this.service.saveMatcheInProgress({ ...req.body, inProgress: true });
     return res.status(201).json(newMatche);
   };
+
+  public changeMatcheInprogrees = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const inProgress = false;
+    await this.service.changeInprogressMatche(id, inProgress);
+    return res.status(200).json({ message: 'Finished' });
+  };
 }
 
 export default MatchesController;

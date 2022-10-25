@@ -58,6 +58,13 @@ class MatchesController {
     await this.service.changeInprogressMatche(id, inProgress);
     return res.status(200).json({ message: 'Finished' });
   };
+
+  public changeMatche = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    await this.service.changeMatche(id, homeTeamGoals, awayTeamGoals);
+    return res.status(200).json({ message: 'match changed successfully' });
+  };
 }
 
 export default MatchesController;

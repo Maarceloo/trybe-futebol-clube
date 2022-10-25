@@ -17,7 +17,6 @@ const jwtValidate = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    console.log(decoded);
     req.body = decoded;
     return next();
   } catch (error) {

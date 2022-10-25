@@ -11,9 +11,18 @@ class TeamController {
   public getAllTeam = async (req: Request, res: Response) => {
     const allTeams = await this.service.TeamGetAll();
 
-    if (!allTeams) return res.status(401).json({ message: 'vazio' });
+    if (!allTeams) return res.status(401).json({ message: 'empty object' });
 
     return res.status(200).json(allTeams);
+  };
+
+  public getIdTeam = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const team = await this.service.TeamGetId(id);
+
+    if (!team) return res.status(401).json({ message: 'empty object' });
+
+    return res.status(200).json(team);
   };
 }
 

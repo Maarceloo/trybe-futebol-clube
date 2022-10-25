@@ -1,5 +1,6 @@
 import teams from '../database/models/teams';
 import matches from '../database/models/matches';
+import IMatcheCreate from '../interfaces/Matche';
 
 class MatchesService {
   public matchesGetAll = async () => {
@@ -18,6 +19,11 @@ class MatchesService {
       ],
     });
     return allMatches;
+  };
+
+  public saveMatcheInProgress = async (body: IMatcheCreate) => {
+    const newMatche = await matches.create(body);
+    return newMatche;
   };
 }
 

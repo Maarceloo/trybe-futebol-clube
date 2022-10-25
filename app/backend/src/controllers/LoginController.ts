@@ -22,7 +22,7 @@ class LoginController {
   };
 
   public Validate = async (req: Request, res: Response) => {
-    const { role } = req.body;
+    const { role } = req.body.user;
     return res.status(200).json({ role });
   };
 }

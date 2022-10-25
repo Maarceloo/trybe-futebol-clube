@@ -27,6 +27,13 @@ class MatchesController {
     // console.log('retornou todos');
     return res.status(200).json(matches);
   };
+
+  public matcheSaveInProgress = async (req: Request, res: Response) => {
+    // body.user inserido pelo jwt, para remover descomente.
+    // delete req.body.user;
+    const newMatche = await this.service.saveMatcheInProgress({ ...req.body, inProgress: true });
+    return res.status(201).json(newMatche);
+  };
 }
 
 export default MatchesController;

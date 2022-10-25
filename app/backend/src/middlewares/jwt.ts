@@ -17,7 +17,7 @@ const jwtValidate = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    req.body = decoded;
+    req.body.user = decoded;
     return next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' });

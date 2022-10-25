@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
+import TeamService from '../services/TeamService';
 import MatchesService from '../services/MatchesService';
 
 class MatchesController {
   public service: MatchesService;
+  public teamService: TeamService;
 
   constructor() {
     this.service = new MatchesService();
+    this.teamService = new TeamService();
   }
 
   public getAllMatches = async (req: Request, res: Response) => {
@@ -31,7 +34,21 @@ class MatchesController {
   public matcheSaveInProgress = async (req: Request, res: Response) => {
     // body.user inserido pelo jwt, para remover descomente.
     // delete req.body.user;
-    const newMatche = await this.service.saveMatcheInProgress({ ...req.body, inProgress: true });
+    const { homeTeam, awayTeam } = req.body;
+    const teamHome = await this.teamService.TeamGetId(homeTeam);
+    const teamAway = await this.teamService.TeamGetId(awayTeam);
+
+    if (!teamHome || !teamAway) {
+      return res
+        .status(404)
+        .json({ message: 'There is no team with such id!' });
+    }
+
+    const newMatche = await this.service.saveMatcheInProgress({
+      ...req.body,
+      inProgress: true,
+    });
+
     return res.status(201).json(newMatche);
   };
 

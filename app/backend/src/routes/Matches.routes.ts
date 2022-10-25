@@ -9,5 +9,6 @@ const matchesRouter = Router();
 matchesRouter.get('/', matchesController.getAllMatches);
 matchesRouter.post('/', jwtValidate, teamsValidate, matchesController.matcheSaveInProgress);
 matchesRouter.patch('/:id/finish', matchesController.changeMatcheInprogrees);
+matchesRouter.patch('/:id', matchesController.changeMatche);
 
 export default matchesRouter;

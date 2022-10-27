@@ -1,6 +1,6 @@
 import teams from '../database/models/teams';
 import matches from '../database/models/matches';
-import IMatcheCreate from '../interfaces/Matche';
+import { IMatcheCreate } from '../interfaces/Matche';
 
 class MatchesService {
   public matchesGetAll = async () => {

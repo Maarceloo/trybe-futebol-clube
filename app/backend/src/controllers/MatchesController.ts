@@ -32,8 +32,6 @@ class MatchesController {
   };
 
   public matcheSaveInProgress = async (req: Request, res: Response) => {
-    // body.user inserido pelo jwt, para remover descomente.
-    // delete req.body.user;
     const { homeTeam, awayTeam } = req.body;
     const teamHome = await this.teamService.TeamGetId(homeTeam);
     const teamAway = await this.teamService.TeamGetId(awayTeam);

@@ -12,9 +12,10 @@ class LeaderboardService {
 
   public homeTeamLeaderboardFalse = async () => {
     const allMatches = await this.service.matchesGetAll();
+    const allTeams = await this.serviceTeam.TeamGetAll();
     const matchesFinish = allMatches.filter((partida) => partida.inProgress === false);
 
-    return matchesFinish;
+    return { matchesFinish, allTeams };
   };
 }
 

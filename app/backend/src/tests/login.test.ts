@@ -17,6 +17,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
+
 describe("testes que cubrem o arquivo de /Login", () => {
   beforeEach(async () => {
     sinon.stub(users, "findOne").resolves({ ...userMock } as users);

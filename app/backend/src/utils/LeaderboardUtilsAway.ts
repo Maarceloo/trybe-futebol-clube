@@ -7,7 +7,8 @@ import {
   golAway,
   totalDerrotasHome,
   totalVitoriasHome,
-  classificacaoSort } from './LeaderboardUtilsHome';
+  classificacaoSort,
+} from './LeaderboardUtilsHome';
 
 const totalPoints = (partidasTime: IMatcheBoard[]) => {
   const points = partidasTime.reduce((acc, game) => {
@@ -21,26 +22,36 @@ const totalPoints = (partidasTime: IMatcheBoard[]) => {
 const efficiency = (partidasTime: IMatcheBoard[]) => {
   const points = totalPoints(partidasTime);
   const partidas = partidasTime.length;
-  const result = ((points / (partidas * 3)) * 100).toFixed(2);
+  const eficiencia = ((points / (partidas * 3)) * 100).toFixed(2);
+  return { eficiencia, partidas, points };
+};
+
+const resultadoTime = (time: ITeam, partidasTime: IMatcheBoard[]) => {
+  const { eficiencia, partidas, points } = efficiency(partidasTime);
+  const result: ITime = {
+    name: time.teamName,
+    totalPoints: points,
+    totalGames: partidas,
+    totalVictories: totalDerrotasHome(partidasTime),
+    totalDraws: totalEmpates(partidasTime),
+    totalLosses: totalVitoriasHome(partidasTime),
+    goalsFavor: golAway(partidasTime),
+    goalsOwn: golHome(partidasTime),
+    goalsBalance: golAway(partidasTime) - golHome(partidasTime),
+    efficiency: eficiencia,
+  };
   return result;
 };
 
-const LeaderboardUtilsAway = async (matchesFinish: IMatcheBoard[], allTeams: ITeam[]) => {
+const LeaderboardUtilsAway = async (
+  matchesFinish: IMatcheBoard[],
+  allTeams: ITeam[],
+) => {
   const classificacao: ITime[] = await allTeams.map((time) => {
-    const partidasTime = matchesFinish.filter((iten) => iten.awayTeam === time.id);
-    const result: ITime = {
-      name: time.teamName,
-      totalPoints: totalPoints(partidasTime),
-      totalGames: partidasTime.length,
-      totalVictories: totalDerrotasHome(partidasTime),
-      totalDraws: totalEmpates(partidasTime),
-      totalLosses: totalVitoriasHome(partidasTime),
-      goalsFavor: golAway(partidasTime),
-      goalsOwn: golHome(partidasTime),
-      goalsBalance: golAway(partidasTime) - golHome(partidasTime),
-      efficiency: efficiency(partidasTime),
-    };
-    return result;
+    const partidasTime: IMatcheBoard[] = matchesFinish.filter(
+      (iten) => iten.awayTeam === time.id,
+    );
+    return resultadoTime(time, partidasTime);
   });
   return classificacaoSort(classificacao);
 };

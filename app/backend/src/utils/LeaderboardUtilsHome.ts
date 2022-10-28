@@ -1,5 +1,3 @@
-// import matches from '../database/models/matches';
-// import teams from '../database/models/teams';
 import ITime from '../interfaces/Time';
 import { IMatcheBoard } from '../interfaces/Matche';
 import ITeam from '../interfaces/Team';
@@ -13,7 +11,7 @@ const totalPoints = (partidasTime: IMatcheBoard[]) => {
   return points;
 };
 
-const totalVitorias = (partidasTime: IMatcheBoard[]) => {
+export const totalVitoriasHome = (partidasTime: IMatcheBoard[]) => {
   const vitorias = partidasTime.reduce((acc, game) => {
     if (game.homeTeamGoals > game.awayTeamGoals) return acc + 1;
     return acc;
@@ -21,7 +19,7 @@ const totalVitorias = (partidasTime: IMatcheBoard[]) => {
   return vitorias;
 };
 
-const totalEmpates = (partidasTime: IMatcheBoard[]) => {
+export const totalEmpates = (partidasTime: IMatcheBoard[]) => {
   const empates = partidasTime.reduce((acc, game) => {
     if (game.homeTeamGoals === game.awayTeamGoals) return acc + 1;
     return acc;
@@ -29,7 +27,7 @@ const totalEmpates = (partidasTime: IMatcheBoard[]) => {
   return empates;
 };
 
-const totalDerrotas = (partidasTime: IMatcheBoard[]) => {
+export const totalDerrotasHome = (partidasTime: IMatcheBoard[]) => {
   const derrotas = partidasTime.reduce((acc, game) => {
     if (game.homeTeamGoals < game.awayTeamGoals) return acc + 1;
     return acc;
@@ -37,21 +35,14 @@ const totalDerrotas = (partidasTime: IMatcheBoard[]) => {
   return derrotas;
 };
 
-const golsPro = (partidasTime: IMatcheBoard[]) => {
+export const golHome = (partidasTime: IMatcheBoard[]) => {
   const gols = partidasTime.reduce((acc, game) => acc + game.homeTeamGoals, 0);
   return gols;
 };
 
-const golsContra = (partidasTime: IMatcheBoard[]) => {
+export const golAway = (partidasTime: IMatcheBoard[]) => {
   const gols = partidasTime.reduce((acc, game) => acc + game.awayTeamGoals, 0);
   return gols;
-};
-
-const goalsBalance = (partidasTime: IMatcheBoard[]) => {
-  const golsHome = golsPro(partidasTime);
-  const golsAway = golsContra(partidasTime);
-  const result = golsHome - golsAway;
-  return result;
 };
 
 const efficiency = (partidasTime: IMatcheBoard[]) => {
@@ -61,7 +52,7 @@ const efficiency = (partidasTime: IMatcheBoard[]) => {
   return result;
 };
 
-const classificacaoSort = (classificacao: ITime[]) => {
+export const classificacaoSort = (classificacao: ITime[]) => {
   const sort = classificacao.sort((a, b) =>
     b.totalPoints - a.totalPoints || b.totalVictories - a.totalVictories
     || b.goalsBalance - a.goalsBalance || b.goalsFavor - a.goalsFavor
@@ -77,12 +68,12 @@ const LeaderboardUtilsHome = async (matchesFinish: IMatcheBoard[], allTeams: ITe
       name: time.teamName,
       totalPoints: totalPoints(partidasTime),
       totalGames: partidasTime.length,
-      totalVictories: totalVitorias(partidasTime),
+      totalVictories: totalVitoriasHome(partidasTime),
       totalDraws: totalEmpates(partidasTime),
-      totalLosses: totalDerrotas(partidasTime),
-      goalsFavor: golsPro(partidasTime),
-      goalsOwn: golsContra(partidasTime),
-      goalsBalance: goalsBalance(partidasTime),
+      totalLosses: totalDerrotasHome(partidasTime),
+      goalsFavor: golHome(partidasTime),
+      goalsOwn: golAway(partidasTime),
+      goalsBalance: golHome(partidasTime) - golAway(partidasTime),
       efficiency: efficiency(partidasTime),
     };
     return result;

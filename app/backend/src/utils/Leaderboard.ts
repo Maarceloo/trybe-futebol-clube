@@ -15,16 +15,24 @@ const golsBalance = (timeDentro: ITime, timeFora: ITime) => {
   return { golsFeitos, saldoGols, golsContra };
 };
 
+const jogosDisputados = (timeDentro: ITime, timeFora: ITime) => {
+  const vitorias = timeDentro.totalVictories + timeFora.totalVictories;
+  const derrotas = timeDentro.totalLosses + timeFora.totalLosses;
+  const empates = timeDentro.totalDraws + timeFora.totalDraws;
+  return { vitorias, derrotas, empates };
+};
+
 const resultadoTime = (timeDentro: ITime, timeFora: ITime) => {
   const { points, partidas, eficiencia } = efficiency(timeDentro as ITime, timeFora as ITime);
   const { golsFeitos, saldoGols, golsContra } = golsBalance(timeDentro as ITime, timeFora as ITime);
+  const { vitorias, derrotas, empates } = jogosDisputados(timeDentro as ITime, timeFora as ITime);
   const result: ITime = {
     name: timeDentro.name,
     totalPoints: points,
     totalGames: partidas,
-    totalVictories: timeDentro.totalVictories + timeFora.totalVictories,
-    totalDraws: timeDentro.totalDraws + timeFora.totalDraws,
-    totalLosses: timeDentro.totalLosses + timeFora.totalLosses,
+    totalVictories: vitorias,
+    totalDraws: empates,
+    totalLosses: derrotas,
     goalsFavor: golsFeitos,
     goalsOwn: golsContra,
     goalsBalance: saldoGols,
